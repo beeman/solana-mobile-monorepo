@@ -6,6 +6,7 @@ import { Pressable, Text, View } from 'react-native'
 import { Container } from '@/components/container'
 import { SignIn } from '@/components/sign-in'
 import { SignUp } from '@/components/sign-up'
+import { SolanaConnect } from '@/components/solana-connect'
 import { authClient } from '@/lib/auth-client'
 import { orpc, queryClient } from '@/utils/orpc'
 
@@ -21,11 +22,15 @@ export default function Home() {
   const dangerColor = useThemeColor('danger')
 
   return (
-    <Container className="p-6">
+    <Container className="space-y-6 p-6">
       <View className="mb-6 py-4">
         <Text className="mb-2 font-bold text-4xl text-foreground">
           solana-mobile-stack
         </Text>
+      </View>
+
+      <View className="mb-6">
+        <SolanaConnect />
       </View>
 
       {session?.user ? (
@@ -92,18 +97,18 @@ export default function Home() {
         </Card>
       </Card>
 
-      <Card variant="secondary" className="mt-6 p-4">
+      <Card variant="secondary" className="my-6 p-4">
         <Card.Title className="mb-3">Private Data</Card.Title>
-        {privateData && (
-          <Card.Description>{privateData.data?.message}</Card.Description>
-        )}
+        <Card.Description>
+          {privateData.data?.message || 'You are signed out'}
+        </Card.Description>
       </Card>
 
       {!session?.user && (
-        <>
+        <View className="flex gap-6">
           <SignIn />
           <SignUp />
-        </>
+        </View>
       )}
     </Container>
   )

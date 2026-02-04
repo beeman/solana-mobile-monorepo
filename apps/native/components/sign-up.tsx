@@ -80,7 +80,7 @@ export function SignUp() {
   }
 
   return (
-    <Surface variant="secondary" className="rounded-lg p-4">
+    <Surface variant="secondary">
       <Text className="mb-4 font-medium text-foreground">Create Account</Text>
 
       <FieldError isInvalid={!!error} className="mb-3">
