@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@solana/kit": "catalog:",
+    "@solana/kit-plugins": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@solana-mobile-stack/config": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "name": "@solana-mobile-stack/solana-client",
+  "private": false,
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "type": "module",
+  "version": "0.0.0"
+}

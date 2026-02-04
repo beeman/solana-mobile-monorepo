@@ -20,6 +20,8 @@
     "@solana-mobile-stack/auth": "workspace:*",
     "@solana-mobile-stack/db": "workspace:*",
     "@solana-mobile-stack/env": "workspace:*",
+    "@solana-mobile-stack/solana-client": "workspace:*",
+    "@solana/kit": "catalog:",
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"

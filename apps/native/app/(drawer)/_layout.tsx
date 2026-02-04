@@ -109,6 +109,24 @@ function DrawerLayout() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="solana"
+        options={{
+          headerTitle: 'Solana',
+          drawerLabel: ({ color, focused }) => (
+            <Text style={{ color: focused ? color : themeColorForeground }}>
+              Solana
+            </Text>
+          ),
+          drawerIcon: ({ size, color, focused }) => (
+            <Ionicons
+              name="wallet-outline"
+              size={size}
+              color={focused ? color : themeColorForeground}
+            />
+          ),
+        }}
+      />
     </Drawer>
   )
 }

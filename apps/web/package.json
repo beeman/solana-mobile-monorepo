@@ -19,6 +19,8 @@
     "@solana-mobile-stack/api": "workspace:*",
     "@solana-mobile-stack/auth": "workspace:*",
     "@solana-mobile-stack/env": "workspace:*",
+    "@solana-mobile-stack/solana-client": "workspace:*",
+    "@solana/kit": "catalog:",
     "@tailwindcss/vite": "^4.1.8",
     "@tanstack/react-form": "^1.23.5",
     "@tanstack/react-query": "^5.80.6",
