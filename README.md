@@ -1,105 +1,187 @@
-# solana-mobile-stack
+# Solana Mobile Stack
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Start, Hono, ORPC, and more.
+A full-stack starter kit for building mobile apps on Solana. Built with Expo, React Native, and modern TypeScript tooling.
 
-## Features
+## What's Included
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Start** - SSR framework with TanStack Router
-- **React Native** - Build mobile apps using React
-- **Expo** - Tools for React Native development
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Hono** - Lightweight, performant server framework
-- **oRPC** - End-to-end type-safe APIs with OpenAPI integration
-- **Bun** - Runtime environment
-- **Drizzle** - TypeScript-first ORM
-- **SQLite/Turso** - Database engine
-- **Authentication** - Better-Auth
-- **Biome** - Linting and formatting
-- **Turborepo** - Optimized monorepo build system
+- **Mobile App** — React Native with Expo, wallet integration via Mobile Wallet Adapter
+- **Web App** — React with TanStack Start for SSR
+- **Backend** — Hono server with oRPC for type-safe APIs
+- **Database** — SQLite/Turso with Drizzle ORM
+- **Auth** — Better-Auth with Sign in with Solana
+- **AI Chat** — Optional Google Gemini integration
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Runtime | Bun |
+| Mobile | React Native, Expo |
+| Web | React, TanStack Start |
+| Server | Hono, oRPC |
+| Database | SQLite/Turso, Drizzle |
+| Solana | @solana/kit, @wallet-ui/react-native-kit |
+| Styling | TailwindCSS, heroui-native |
+| Monorepo | Turborepo |
+
+## Prerequisites
+
+- [Bun](https://bun.sh) (v1.0+)
+- [Docker](https://docker.com) (for local database)
+- Android Studio with an emulator, or a physical Android device
 
 ## Getting Started
 
-First, install the dependencies:
+### 1. Clone and Install
 
 ```bash
+git clone https://github.com/beeman/solana-mobile-stack.git
+cd solana-mobile-stack
 bun install
 ```
 
-## Database Setup
+### 2. Set Up the Database
 
-This project uses SQLite with Drizzle ORM.
+Start the local database:
 
-1. Start the local database using Docker:
- 
- ```bash
- bun run db:up
- ```
- 
- This starts a LibSQL (Turso) server locally on port 8080. If you prefer to run it in the background, you can add the `-d` flag: `bun run db:up -- -d`.
- 
- 2. Configure your environment variables. Copy `apps/server/.env.example` to `apps/server/.env`:
+```bash
+bun run db:up
+```
+
+This starts a LibSQL server on port 8080. Add `-d` to run in the background: `bun run db:up -- -d`
+
+Copy the environment file:
+
 ```bash
 cp apps/server/.env.example apps/server/.env
 ```
 
-The default values in `.env.example` are configured to work with the local Docker database.
+Generate a secure auth secret and update the `.env` file:
 
-3. Apply the schema to your database:
+```bash
+openssl rand -hex 32
+```
+
+Push the schema:
 
 ```bash
 bun run db:push
 ```
 
-To stop the database:
-
-```bash
-bun run db:down
-```
-
-## Running the Application
-
-After setting up the database, run the development server:
+### 3. Start the Server and Web App
 
 ```bash
 bun run dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-Use the Expo Go app to run the mobile application.
-The API is running at [http://localhost:3000](http://localhost:3000).
+This starts:
+- Web app at http://localhost:3001
+- API server at http://localhost:3000
 
-## Git Hooks and Formatting
+### 4. Build and Run the Mobile App
 
-- Format and lint fix: `bun run check`
+The mobile app requires a native build (it won't run in Expo Go due to native dependencies).
+
+In a separate terminal:
+
+```bash
+cd apps/native
+bun run android
+```
+
+This builds the app and installs it on your connected device or emulator. Subsequent runs will be faster as they use the cached build.
+
+## Wallet Support
+
+The app uses Mobile Wallet Adapter to connect to Solana wallets. Supported wallets include:
+
+- **Seeker Wallet** (built-in on Solana Seeker devices)
+- Phantom
+- Solflare
+- Backpack
+- Jupiter
+
+On the emulator, install a wallet app from the Play Store to test wallet connections.
 
 ## Project Structure
 
 ```
 solana-mobile-stack/
 ├── apps/
-│   ├── web/         # Frontend application (React + TanStack Start)
-│   ├── native/      # Mobile application (React Native, Expo)
-│   └── server/      # Backend API (Hono, ORPC)
+│   ├── native/      # Mobile app (React Native, Expo)
+│   ├── web/         # Web app (React, TanStack Start)
+│   └── server/      # API server (Hono, oRPC)
 ├── packages/
-│   ├── api/         # API layer / business logic
-│   ├── auth/        # Authentication configuration & logic
-│   └── db/          # Database schema & queries
+│   ├── api/         # Shared API routes and business logic
+│   ├── auth/        # Authentication configuration
+│   ├── db/          # Database schema and queries
+│   ├── env/         # Environment variable validation
+│   └── solana-client/  # Solana RPC client utilities
 ```
+
+## Environment Variables
+
+Edit `apps/server/.env` to configure the server:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `BETTER_AUTH_SECRET` | Auth secret (min 32 chars). Generate with `openssl rand -hex 32` | — |
+| `BETTER_AUTH_URL` | Server URL for auth callbacks | `http://localhost:3000` |
+| `CORS_ORIGIN` | Allowed origin for CORS | `http://localhost:3001` |
+| `DATABASE_URL` | Database connection URL | `http://localhost:8080` |
+| `DATABASE_AUTH_TOKEN` | Database auth token | `local` |
+| `SOLANA_RPC_URL` | Solana RPC endpoint | `https://api.devnet.solana.com` |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Optional. Enables AI chat feature | — |
+
+## Enabling AI Chat (Optional)
+
+The app includes an AI chat feature powered by Google Gemini. To enable it:
+
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Click "Create API Key"
+3. Copy the key and add it to `apps/server/.env`:
+   ```
+   GOOGLE_GENERATIVE_AI_API_KEY=your-api-key-here
+   ```
+4. Restart the server
 
 ## Available Scripts
 
-- `bun run build`: Build all applications
-- `bun run check-types`: Check TypeScript types across all apps
-- `bun run lint`: Run Biome formatting and linting check
-- `bun run lint:fix`: Run Biome formatting and linting check and fix
-- `bun run db:down`: Stop the local database
-- `bun run db:local`: Start the local SQLite database using Turso CLI
-- `bun run db:push`: Push schema changes to database
-- `bun run db:studio`: Open database studio UI
-- `bun run db:up`: Start the local database using Docker
-- `bun run dev:native`: Start the React Native/Expo development server
-- `bun run dev:server`: Start only the server
-- `bun run dev:web`: Start only the web application
-- `bun run dev`: Start all applications in development mode
+From the project root:
+
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start all apps in development mode |
+| `bun run dev:native` | Start only the mobile app dev server |
+| `bun run dev:web` | Start only the web app |
+| `bun run dev:server` | Start only the API server |
+| `bun run build` | Build all apps |
+| `bun run check-types` | TypeScript type checking |
+| `bun run lint` | Run linting and formatting checks |
+| `bun run lint:fix` | Fix linting and formatting issues |
+| `bun run db:up` | Start the local database |
+| `bun run db:down` | Stop the local database |
+| `bun run db:push` | Push schema changes |
+| `bun run db:studio` | Open database UI |
+
+## Troubleshooting
+
+### Mobile app won't start
+
+Make sure you've run `bun run android` at least once from `apps/native/` to create the native build. The app requires native modules that aren't available in Expo Go.
+
+### Wallet not connecting
+
+- Ensure you have a compatible wallet app installed on your device/emulator
+- Check that the wallet app is up to date
+- On emulator, you may need to install a wallet from the Play Store
+
+### Database connection errors
+
+- Verify Docker is running: `docker ps`
+- Check that the database is up: `bun run db:up`
+- Ensure `DATABASE_URL` in `.env` matches your setup
+
+## License
+
+MIT
