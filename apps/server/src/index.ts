@@ -13,6 +13,14 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 
+console.log('🚀 Server starting...')
+console.log(`  DATABASE_URL: ${env.DATABASE_URL}`)
+console.log(`  BETTER_AUTH_URL: ${env.BETTER_AUTH_URL}`)
+console.log(`  CORS_ORIGINS: ${env.CORS_ORIGINS.join(', ')}`)
+console.log(`  SOLANA_CLUSTER: ${env.SOLANA_CLUSTER}`)
+console.log(`  SOLANA_ENDPOINT: ${env.SOLANA_ENDPOINT}`)
+console.log(`  NODE_ENV: ${env.NODE_ENV}`)
+
 const app = new Hono()
 
 app.use(logger())
