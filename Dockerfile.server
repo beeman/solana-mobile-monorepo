@@ -12,6 +12,8 @@ RUN bun install --frozen-lockfile --ignore-scripts --linker=hoisted
 FROM base AS builder
 COPY . .
 RUN bun run build --filter server
+# Archive all workspace package.json files for production install in runner stage
+RUN find . -name "package.json" -not -path "*/node_modules/*" -print0 | tar -cf /tmp/package-jsons.tar --null -T -
 
 FROM oven/bun:1.3.9 AS runner
 WORKDIR /app
@@ -21,8 +23,11 @@ COPY --from=builder /app/apps/server/dist ./apps/server/dist
 COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
 COPY --from=builder /app/packages/db ./packages/db
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/bun.lock ./bun.lock
+COPY --from=builder /tmp/package-jsons.tar .
+RUN tar -xf package-jsons.tar && rm package-jsons.tar
+
+RUN bun install --production --ignore-scripts
 
 EXPOSE 3000
 CMD ["bun", "run", "--cwd", "apps/server", "start"]
