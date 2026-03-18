@@ -30,7 +30,16 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 - [Turso CLI](https://docs.turso.tech/cli/installation) (for local database)
 - Android Studio with an emulator, or a physical Android device
 
-## Getting Started
+## Getting Started (recommended)
+
+```bash
+# Clone the repo, run installation
+bun x create-seed@latest -t gh:beeman/solana-mobile-monorepo
+```
+
+Now, move continue to [2. Set Up the Database](#2-set-up-the-database)
+
+## Getting Started (manual)
 
 ### 1. Clone and Install
 
@@ -42,6 +51,19 @@ bun install
 ```
 
 Running `bun rename` without arguments detects that the directory name differs from the project name and prompts you to rename. You can also pass a name explicitly: `bun rename my-app`.
+
+Copy the environment file:
+
+```bash
+cp apps/server/.env.example apps/server/.env
+```
+
+Generate a secure auth secret and update the `apps/server/.env` file:
+
+```bash
+openssl rand -hex 32
+# BETTER_AUTH_SECRET=replace this value
+```
 
 ### 2. Set Up the Database
 
@@ -59,33 +81,29 @@ Alternatively, if you prefer Docker:
 docker run --rm -p 8080:8080 ghcr.io/tursodatabase/libsql-server:latest
 ```
 
-Copy the environment file:
-
-```bash
-cp apps/server/.env.example apps/server/.env
-```
-
-Generate a secure auth secret and update the `.env` file:
-
-```bash
-openssl rand -hex 32
-```
-
 Push the schema:
 
 ```bash
 bun run db:push
 ```
 
-### 3. Start the Server and Web App
+### 3. Start the apps
+
+#### Start the Server
 
 ```bash
-bun run dev
+bun run dev:server
 ```
 
-This starts:
-- Web app at http://localhost:3001
-- API server at http://localhost:3000
+This starts the API at http://localhost:3000
+
+#### Start the Web App
+
+```bash
+bun run dev:web
+```
+
+This starts the Web app at http://localhost:3001
 
 ### 4. Build and Run the Mobile App
 
@@ -94,8 +112,7 @@ The mobile app requires a native build (it won't run in Expo Go due to native de
 In a separate terminal:
 
 ```bash
-cd apps/native
-bun run android
+bun run dev:native
 ```
 
 This builds the app and installs it on your connected device or emulator. Subsequent runs will be faster as they use the cached build.
@@ -108,6 +125,8 @@ The app uses Mobile Wallet Adapter to connect to Solana wallets. Supported walle
 - Phantom
 - Solflare
 - Backpack
+
+Unsupported mobile wallets:
 - Jupiter
 
 On the emulator, install a wallet app from the Play Store to test wallet connections.
