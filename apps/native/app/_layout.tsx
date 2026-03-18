@@ -46,7 +46,13 @@ export default function Layout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <KeyboardProvider>
             <AppThemeProvider>
-              <HeroUINativeProvider>
+              <HeroUINativeProvider
+                config={{
+                  devInfo: {
+                    stylingPrinciples: false,
+                  },
+                }}
+              >
                 <StackLayout />
               </HeroUINativeProvider>
             </AppThemeProvider>

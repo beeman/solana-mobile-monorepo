@@ -7,8 +7,7 @@ const DEFAULT_SERVER_PORT = '3000'
 const LOCALHOST_HOSTS = new Set(['127.0.0.1', '::1', 'localhost'])
 const CONFIGURED_SOURCE = 'configured'
 const DERIVED_SOURCE = 'derived'
-const SERVER_URL_LOGGED_FLAG =
-  '__solana_mobile_monorepo_native_server_url_logged__'
+const SERVER_URL_LOGGED_FLAG = '__native_server_url_logged__'
 
 type ServerUrlSource = typeof CONFIGURED_SOURCE | typeof DERIVED_SOURCE
 

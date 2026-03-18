@@ -37,7 +37,7 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 bun x create-seed@latest -t gh:beeman/solana-mobile-monorepo
 ```
 
-Now, move continue to [2. Set Up the Database](#2-set-up-the-database)
+Now, continue to [2. Set Up the Database](#2-set-up-the-database)
 
 ## Getting Started (manual)
 
