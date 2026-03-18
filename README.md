@@ -252,6 +252,10 @@ Ruler configures these MCP servers for AI agents:
 
 ## Troubleshooting
 
+### Mobile app can't reach the local server
+
+The native app logs `Native server URL` on startup. If that URL is wrong or unreachable from your Android device or emulator, set `EXPO_PUBLIC_SERVER_URL=http://<your-mac-lan-ip>:3000` in `apps/native/.env` and restart the app.
+
 ### Mobile app won't start
 
 Make sure you've run `bun run android` at least once from `apps/native/` to create the native build. The app requires native modules that aren't available in Expo Go.

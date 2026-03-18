@@ -1,6 +1,5 @@
 import { useChat } from '@ai-sdk/react'
 import { Ionicons } from '@expo/vector-icons'
-import { env } from '@solana-mobile-monorepo/env/native'
 import { DefaultChatTransport } from 'ai'
 import { fetch as expoFetch } from 'expo/fetch'
 import {
@@ -22,14 +21,9 @@ import {
 } from 'react-native'
 
 import { Container } from '@/components/container'
+import { serverUrl } from '@/lib/server-url'
 
 const generateAPIUrl = (relativePath: string) => {
-  const serverUrl = env.EXPO_PUBLIC_SERVER_URL
-  if (!serverUrl) {
-    throw new Error(
-      'EXPO_PUBLIC_SERVER_URL environment variable is not defined',
-    )
-  }
   const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`
   return serverUrl.concat(path)
 }
