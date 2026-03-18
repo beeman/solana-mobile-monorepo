@@ -1,4 +1,4 @@
-import { getBase58Decoder, getBase64Encoder } from '@solana/kit'
+import { getBase58Decoder, getBase64Encoder, getUtf8Decoder } from '@solana/kit'
 import type {
   SolanaAuthNonceResponse,
   SolanaAuthVerifyResponse,
@@ -36,12 +36,13 @@ export function useSolanaSignIn() {
         statement: 'Sign in to Solana Mobile Monorepo',
       })
 
-      // Convert MWA result: both are Base64 strings
+      const signatureBase64 = getUtf8Decoder().decode(result.signature)
+      const signedMessageBase64 = getUtf8Decoder().decode(result.signedMessage)
       const signatureBase58 = getBase58Decoder().decode(
-        getBase64Encoder().encode(result.signature),
+        getBase64Encoder().encode(signatureBase64),
       )
-      const messageUtf8 = new TextDecoder().decode(
-        getBase64Encoder().encode(result.message),
+      const messageUtf8 = getUtf8Decoder().decode(
+        getBase64Encoder().encode(signedMessageBase64),
       )
 
       const { data: verifyData, error: verifyError } =
