@@ -3,7 +3,7 @@ import { db } from '@solana-mobile-monorepo/db'
 import { user } from '@solana-mobile-monorepo/db/schema/auth'
 import { eq } from 'drizzle-orm'
 
-import { authPublicProcedure, authRequiredProcedure } from '../index'
+import { authPublicProcedure } from '../index'
 import { solanaRouter } from './solana'
 import { todoRouter } from './todo'
 
@@ -28,12 +28,6 @@ export const appRouter = {
       .limit(1)
 
     return currentUser ?? null
-  }),
-  privateData: authRequiredProcedure.handler(({ context }) => {
-    return {
-      message: 'This is private',
-      user: context.session.user,
-    }
   }),
   solana: solanaRouter,
   todo: todoRouter,
