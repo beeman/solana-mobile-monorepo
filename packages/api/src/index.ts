@@ -4,7 +4,7 @@ import type { Context } from './context'
 
 export const o = os.$context<Context>()
 
-export const publicProcedure = o
+export const authPublicProcedure = o
 
 const requireAuth = o.middleware(async ({ context, next }) => {
   if (!context.session?.user) {
@@ -12,9 +12,10 @@ const requireAuth = o.middleware(async ({ context, next }) => {
   }
   return next({
     context: {
+      ...context,
       session: context.session,
     },
   })
 })
 
-export const protectedProcedure = publicProcedure.use(requireAuth)
+export const authRequiredProcedure = authPublicProcedure.use(requireAuth)

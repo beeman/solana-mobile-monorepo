@@ -1,124 +1,145 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useQuery } from '@tanstack/react-query'
-import { Card, Chip, useThemeColor } from 'heroui-native'
-import { Pressable, Text, View } from 'react-native'
+import { Button, Card, useThemeColor } from 'heroui-native'
+import { Text, View } from 'react-native'
 
 import { Container } from '@/components/container'
 import { SignIn } from '@/components/sign-in'
 import { SignUp } from '@/components/sign-up'
 import { SolanaConnect } from '@/components/solana-connect'
 import { SolanaSignInButton } from '@/components/solana-sign-in-button'
-import { authClient } from '@/lib/auth-client'
+import { type AuthSession, authClient } from '@/lib/auth-client'
 import { orpc, queryClient } from '@/utils/orpc'
 
 export default function Home() {
-  const healthCheck = useQuery(orpc.healthCheck.queryOptions())
-  const privateData = useQuery(orpc.privateData.queryOptions())
-  const isConnected = healthCheck?.data === 'OK'
-  const isLoading = healthCheck?.isLoading
   const { data: session } = authClient.useSession()
+  const meQuery = useQuery(orpc.me.queryOptions())
+  const healthCheck = useQuery(orpc.healthCheck.queryOptions())
 
+  return (
+    <Container>
+      <View className="flex w-full flex-col gap-6 p-6">
+        <Text className="mb-2 text-center font-bold text-4xl text-foreground">
+          Solana Mobile Monorepo
+        </Text>
+        <HomeUiStatus
+          isConnected={healthCheck?.data === 'OK'}
+          isLoading={healthCheck?.isLoading}
+        />
+        <HomeUiCurrentUser isLoading={meQuery.isLoading} user={meQuery.data} />
+        <SolanaConnect />
+        {session ? <HomeUiSession session={session} /> : <HomeUiNoSession />}
+      </View>
+    </Container>
+  )
+}
+
+function HomeUiStatus({
+  isConnected,
+  isLoading,
+}: {
+  isConnected: boolean
+  isLoading: boolean
+}) {
   const mutedColor = useThemeColor('muted')
   const successColor = useThemeColor('success')
   const dangerColor = useThemeColor('danger')
 
   return (
-    <Container className="space-y-6 p-6">
-      <View className="mb-6 py-4">
-        <Text className="mb-2 font-bold text-4xl text-foreground">
-          Solana Mobile Monorepo
-        </Text>
+    <Card className="p-4">
+      <View className="flex-row items-center">
+        <View
+          className={`mr-3 h-3 w-3 rounded-full ${isConnected ? 'bg-success' : 'bg-muted'}`}
+        />
+        <View className="flex-1">
+          <Text className="mb-1 font-medium text-foreground">ORPC Backend</Text>
+          <Card.Description>
+            {isLoading
+              ? 'Checking connection...'
+              : isConnected
+                ? 'Connected to API'
+                : 'API Disconnected'}
+          </Card.Description>
+        </View>
+        {isLoading && (
+          <Ionicons name="hourglass-outline" size={20} color={mutedColor} />
+        )}
+        {!isLoading && isConnected && (
+          <Ionicons name="checkmark-circle" size={20} color={successColor} />
+        )}
+        {!isLoading && !isConnected && (
+          <Ionicons name="close-circle" size={20} color={dangerColor} />
+        )}
       </View>
+    </Card>
+  )
+}
 
-      <View className="mb-6">
-        <SolanaConnect />
-      </View>
+function HomeUiCurrentUser({
+  isLoading,
+  user,
+}: {
+  isLoading: boolean
+  user:
+    | {
+        email: string
+        image: string | null
+        id: string
+        name: string
+      }
+    | null
+    | undefined
+}) {
+  return (
+    <Card className="p-4">
+      <Card.Title className="mb-3">Current User</Card.Title>
+      <Card.Description>
+        {isLoading
+          ? 'Checking session...'
+          : user
+            ? `${user.name} (${user.email})`
+            : 'You are signed out'}
+      </Card.Description>
+    </Card>
+  )
+}
 
-      {session?.user ? (
-        <Card variant="secondary" className="mb-6 p-4">
-          <Text className="mb-2 text-base text-foreground">
-            Welcome, <Text className="font-medium">{session.user.name}</Text>
+function HomeUiNoSession() {
+  return (
+    <Card className="mb-6 p-4">
+      <Card.Title className="mb-3">No active session</Card.Title>
+      <View className="flex gap-6">
+        <SolanaSignInButton />
+        <View className="flex-row items-center gap-4">
+          <View className="h-[1] flex-1 bg-muted/20" />
+          <Text className="text-muted text-xs uppercase">
+            Or continue with email
           </Text>
-          <Text className="mb-4 text-muted text-sm">{session.user.email}</Text>
-          <Pressable
-            className="self-start rounded-lg bg-danger px-4 py-3 active:opacity-70"
-            onPress={() => {
-              authClient.signOut()
-              queryClient.invalidateQueries()
-            }}
-          >
-            <Text className="font-medium text-foreground">Sign Out</Text>
-          </Pressable>
-        </Card>
-      ) : null}
-
-      <Card variant="secondary" className="p-6">
-        <View className="mb-4 flex-row items-center justify-between">
-          <Card.Title>System Status</Card.Title>
-          <Chip
-            variant="secondary"
-            color={isConnected ? 'success' : 'danger'}
-            size="sm"
-          >
-            <Chip.Label>{isConnected ? 'LIVE' : 'OFFLINE'}</Chip.Label>
-          </Chip>
+          <View className="h-[1] flex-1 bg-muted/20" />
         </View>
+        <SignIn />
+        <SignUp />
+      </View>
+    </Card>
+  )
+}
 
-        <Card className="p-4">
-          <View className="flex-row items-center">
-            <View
-              className={`mr-3 h-3 w-3 rounded-full ${isConnected ? 'bg-success' : 'bg-muted'}`}
-            />
-            <View className="flex-1">
-              <Text className="mb-1 font-medium text-foreground">
-                ORPC Backend
-              </Text>
-              <Card.Description>
-                {isLoading
-                  ? 'Checking connection...'
-                  : isConnected
-                    ? 'Connected to API'
-                    : 'API Disconnected'}
-              </Card.Description>
-            </View>
-            {isLoading && (
-              <Ionicons name="hourglass-outline" size={20} color={mutedColor} />
-            )}
-            {!isLoading && isConnected && (
-              <Ionicons
-                name="checkmark-circle"
-                size={20}
-                color={successColor}
-              />
-            )}
-            {!isLoading && !isConnected && (
-              <Ionicons name="close-circle" size={20} color={dangerColor} />
-            )}
-          </View>
-        </Card>
-      </Card>
-
-      <Card variant="secondary" className="my-6 p-4">
-        <Card.Title className="mb-3">Private Data</Card.Title>
-        <Card.Description>
-          {privateData.data?.message || 'You are signed out'}
-        </Card.Description>
-      </Card>
-
-      {!session?.user && (
-        <View className="flex gap-6">
-          <SolanaSignInButton />
-          <View className="flex-row items-center gap-4">
-            <View className="h-[1] flex-1 bg-muted/20" />
-            <Text className="text-muted text-xs uppercase">
-              Or continue with email
-            </Text>
-            <View className="h-[1] flex-1 bg-muted/20" />
-          </View>
-          <SignIn />
-          <SignUp />
-        </View>
-      )}
-    </Container>
+function HomeUiSession({ session }: { session: AuthSession }) {
+  return (
+    <Card className="mb-6 p-4">
+      <Card.Title className="mb-3">
+        Welcome, <Text className="font-medium">{session.user.name}</Text>
+      </Card.Title>
+      <Text className="mb-4 text-muted text-sm">{session.user.email}</Text>
+      <Button
+        onPress={() => {
+          authClient.signOut()
+          void queryClient.invalidateQueries()
+        }}
+        variant="danger-soft"
+      >
+        Sign Out
+      </Button>
+    </Card>
   )
 }

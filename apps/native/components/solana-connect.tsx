@@ -24,7 +24,7 @@ export function SolanaConnect() {
       </Card.Body>
       <Card.Footer>
         {account ? (
-          <Button variant="outline" size="sm" onPress={disconnect}>
+          <Button variant="secondary" onPress={disconnect}>
             Disconnect
           </Button>
         ) : (
