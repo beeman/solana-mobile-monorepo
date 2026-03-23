@@ -6,3 +6,6 @@ export const authClient = createAuthClient({
   baseURL: env.VITE_SERVER_URL,
   plugins: [solanaAuthClient()],
 })
+
+export type MaybeAuthSession = ReturnType<typeof authClient.useSession>['data']
+export type AuthSession = NonNullable<MaybeAuthSession>

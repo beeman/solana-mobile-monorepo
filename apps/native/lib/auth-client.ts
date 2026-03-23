@@ -17,3 +17,6 @@ export const authClient = createAuthClient({
     solanaAuthClient(),
   ],
 })
+
+export type MaybeAuthSession = ReturnType<typeof authClient.useSession>['data']
+export type AuthSession = NonNullable<MaybeAuthSession>

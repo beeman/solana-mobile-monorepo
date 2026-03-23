@@ -5,7 +5,7 @@ export function SolanaSignInButton() {
   const { handleSignIn, isLoading } = useSolanaSignIn()
 
   return (
-    <Button onPress={handleSignIn} isDisabled={isLoading} variant="secondary">
+    <Button onPress={handleSignIn} isDisabled={isLoading} variant="primary">
       {isLoading ? (
         <Spinner size="sm" />
       ) : (
