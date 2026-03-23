@@ -10,6 +10,7 @@ import { HeroUINativeProvider } from 'heroui-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
+import { ThemedStatusBar } from '@/components/themed-status-bar'
 import { AppThemeProvider } from '@/contexts/app-theme-context'
 import { debugServerUrl } from '@/lib/server-url'
 import { queryClient } from '@/utils/orpc'
@@ -53,6 +54,7 @@ export default function Layout() {
                   },
                 }}
               >
+                <ThemedStatusBar />
                 <StackLayout />
               </HeroUINativeProvider>
             </AppThemeProvider>

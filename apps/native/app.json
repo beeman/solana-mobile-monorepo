@@ -8,7 +8,7 @@
     },
     "name": "solana-mobile-monorepo",
     "slug": "solana-mobile-monorepo",
-    "plugins": ["expo-font"],
+    "plugins": ["expo-font", "expo-router", "expo-secure-store"],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
