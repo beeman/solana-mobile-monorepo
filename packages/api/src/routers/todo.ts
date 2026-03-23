@@ -1,35 +1,45 @@
 import { db } from '@solana-mobile-monorepo/db'
 import { todo } from '@solana-mobile-monorepo/db/schema/todo'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import z from 'zod'
 
-import { authPublicProcedure } from '../index'
+import { authRequiredProcedure } from '../index'
 
 export const todoRouter = {
-  getAll: authPublicProcedure.handler(async () => {
-    return await db.select().from(todo)
+  getAll: authRequiredProcedure.handler(async ({ context }) => {
+    return await db
+      .select()
+      .from(todo)
+      .where(eq(todo.userId, context.session.user.id))
   }),
 
-  create: authPublicProcedure
+  create: authRequiredProcedure
     .input(z.object({ text: z.string().min(1) }))
-    .handler(async ({ input }) => {
+    .handler(async ({ context, input }) => {
       return await db.insert(todo).values({
+        userId: context.session.user.id,
         text: input.text,
       })
     }),
 
-  toggle: authPublicProcedure
+  toggle: authRequiredProcedure
     .input(z.object({ id: z.number(), completed: z.boolean() }))
-    .handler(async ({ input }) => {
+    .handler(async ({ context, input }) => {
       return await db
         .update(todo)
         .set({ completed: input.completed })
-        .where(eq(todo.id, input.id))
+        .where(
+          and(eq(todo.id, input.id), eq(todo.userId, context.session.user.id)),
+        )
     }),
 
-  delete: authPublicProcedure
+  delete: authRequiredProcedure
     .input(z.object({ id: z.number() }))
-    .handler(async ({ input }) => {
-      return await db.delete(todo).where(eq(todo.id, input.id))
+    .handler(async ({ context, input }) => {
+      return await db
+        .delete(todo)
+        .where(
+          and(eq(todo.id, input.id), eq(todo.userId, context.session.user.id)),
+        )
     }),
 }

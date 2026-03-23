@@ -1,5 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  ErrorComponent,
+  redirect,
+} from '@tanstack/react-router'
 import { Loader2, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -13,10 +17,35 @@ import {
 } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { getUser } from '@/functions/get-user'
 import { orpc } from '@/utils/orpc'
 
 export const Route = createFileRoute('/todos')({
   component: TodosRoute,
+  errorComponent: ({ error }) => {
+    console.error('[todos] Route error:', error)
+    return <ErrorComponent error={error} />
+  },
+  beforeLoad: async () => {
+    try {
+      const session = await getUser()
+      return { session }
+    } catch (error) {
+      console.error('[todos] beforeLoad error:', error)
+      throw error
+    }
+  },
+  loader: async ({
+    context,
+  }: {
+    context: { session: Awaited<ReturnType<typeof getUser>> | null }
+  }) => {
+    if (!context.session) {
+      throw redirect({
+        to: '/login',
+      })
+    }
+  },
 })
 
 function TodosRoute() {

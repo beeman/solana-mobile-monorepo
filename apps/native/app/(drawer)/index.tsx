@@ -13,7 +13,6 @@ import { orpc, queryClient } from '@/utils/orpc'
 
 export default function Home() {
   const { data: session } = authClient.useSession()
-  const meQuery = useQuery(orpc.me.queryOptions())
   const healthCheck = useQuery(orpc.healthCheck.queryOptions())
 
   return (
@@ -26,7 +25,6 @@ export default function Home() {
           isConnected={healthCheck?.data === 'OK'}
           isLoading={healthCheck?.isLoading}
         />
-        <HomeUiCurrentUser isLoading={meQuery.isLoading} user={meQuery.data} />
         <SolanaConnect />
         {session ? <HomeUiSession session={session} /> : <HomeUiNoSession />}
       </View>
@@ -71,35 +69,6 @@ function HomeUiStatus({
           <Ionicons name="close-circle" size={20} color={dangerColor} />
         )}
       </View>
-    </Card>
-  )
-}
-
-function HomeUiCurrentUser({
-  isLoading,
-  user,
-}: {
-  isLoading: boolean
-  user:
-    | {
-        email: string
-        image: string | null
-        id: string
-        name: string
-      }
-    | null
-    | undefined
-}) {
-  return (
-    <Card className="p-4">
-      <Card.Title className="mb-3">Current User</Card.Title>
-      <Card.Description>
-        {isLoading
-          ? 'Checking session...'
-          : user
-            ? `${user.name} (${user.email})`
-            : 'You are signed out'}
-      </Card.Description>
     </Card>
   )
 }

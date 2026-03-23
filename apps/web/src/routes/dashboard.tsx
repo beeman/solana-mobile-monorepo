@@ -38,14 +38,13 @@ export const Route = createFileRoute('/dashboard')({
 
 function RouteComponent() {
   const { session } = Route.useRouteContext()
-
-  const privateData = useQuery(orpc.privateData.queryOptions())
+  const meQuery = useQuery(orpc.me.queryOptions())
 
   return (
     <div>
       <h1>Dashboard</h1>
       <p>Welcome {session?.user.name}</p>
-      <p>API: {privateData.data?.message}</p>
+      <pre>{JSON.stringify(meQuery.data, null, 2)}</pre>
     </div>
   )
 }
