@@ -1,9 +1,10 @@
 import '@/polyfills'
 import '@/global.css'
+import { env } from '@solana-mobile-monorepo/env/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
-  createSolanaDevnet,
   MobileWalletProvider,
+  type SolanaCluster,
 } from '@wallet-ui/react-native-kit'
 import { Stack } from 'expo-router'
 import { HeroUINativeProvider } from 'heroui-native'
@@ -21,11 +22,15 @@ export const unstable_settings = {
 
 debugServerUrl()
 
-const cluster = createSolanaDevnet()
+const cluster = {
+  id: `solana:${env.EXPO_PUBLIC_SOLANA_AUTH_CLUSTER}`,
+  url: env.EXPO_PUBLIC_SOLANA_CLUSTER_URL,
+} satisfies Pick<SolanaCluster, 'id' | 'url'>
+
 const identity = {
+  icon: 'favicon.png',
   name: 'Solana Mobile Monorepo',
   uri: 'https://solana.com',
-  icon: 'favicon.png',
 }
 
 function StackLayout() {

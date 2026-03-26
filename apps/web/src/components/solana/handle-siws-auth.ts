@@ -4,72 +4,62 @@ import {
   getBase58Decoder,
   type Signature,
 } from '@solana/kit'
-import type {
-  SolanaAuthNonceResponse,
-  SolanaAuthVerifyResponse,
-} from '@solana-mobile-monorepo/better-auth-solana/types'
-import type {
-  SolanaSignInInput,
-  SolanaSignInOutput,
-  WalletAccount,
-} from '@wallet-ui/react'
+import type { SolanaSignInInput, SolanaSignInOutput } from '@wallet-ui/react'
+import {
+  createSIWSInput,
+  type SIWSNonceResponse,
+} from 'better-auth-solana/client'
+import { authClient } from '@/lib/auth-client'
 
 export async function handleSiwsAuth({
   address,
-  baseUrl,
+  cluster,
   refresh,
   signIn,
   statement,
 }: {
   address: Address
-  baseUrl: string
+  cluster: string
   refresh: () => Promise<void>
   signIn: (input: SolanaSignInInput) => Promise<SolanaSignInOutput>
   statement: string
 }) {
-  const nonce = await fetchNonce({ address, baseUrl })
-  const { signature, message } = await createAndSignMessage({
-    nonce,
+  const nonce = await fetchNonce({ address, cluster })
+  const { message, signature } = await createAndSignMessage({
     address,
-    statement,
+    nonce,
     signIn,
+    statement,
   })
   const verifyData = await verifyMessage({
     address,
-    baseUrl,
-    signature,
+    cluster,
     message,
+    signature,
   })
+
   await refresh()
+
   return verifyData
 }
 
 async function fetchNonce({
   address,
-  baseUrl,
+  cluster,
 }: {
   address: Address
-  baseUrl: string
-}): Promise<SolanaAuthNonceResponse> {
-  const response = await fetch(`${baseUrl}/api/auth/solana-auth/nonce`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ walletAddress: address }),
-    credentials: 'include',
+  cluster: string
+}): Promise<SIWSNonceResponse> {
+  const { data, error } = await authClient.siws.nonce({
+    cluster,
+    walletAddress: address,
   })
 
-  if (!response.ok) {
-    let errorMessage = 'Failed to fetch nonce'
-    try {
-      const errorData = await response.json()
-      errorMessage = errorData.message || errorMessage
-    } catch {
-      // Response wasn't JSON
-    }
-    throw new Error(errorMessage)
+  if (!data) {
+    throw new Error(error?.message || 'Failed to fetch nonce')
   }
 
-  return response.json()
+  return data
 }
 
 async function createAndSignMessage({
@@ -79,15 +69,14 @@ async function createAndSignMessage({
   statement,
 }: {
   address: Address
-  nonce: SolanaAuthNonceResponse
+  nonce: SIWSNonceResponse
   signIn: (input: SolanaSignInInput) => Promise<SolanaSignInOutput>
   statement: string
-}): Promise<{ account: WalletAccount; message: string; signature: Signature }> {
+}): Promise<{ message: string; signature: Signature }> {
   const input = createSignInInput({ address, nonce, statement })
-  const { account, signedMessage, signature } = await signIn(input)
+  const { signedMessage, signature } = await signIn(input)
 
   return {
-    account,
     message: new TextDecoder().decode(signedMessage),
     signature: signatureBytesToSignature(signature),
   }
@@ -105,50 +94,37 @@ function createSignInInput({
   statement,
 }: {
   address: Address
-  nonce: SolanaAuthNonceResponse
+  nonce: SIWSNonceResponse
   statement: string
 }): SolanaSignInInput {
-  return {
+  return createSIWSInput({
     address,
-    chainId: nonce.chainId,
-    domain: nonce.domain,
-    uri: nonce.uri,
-    version: '1',
+    challenge: nonce,
     statement,
-    nonce: nonce.nonce,
-    issuedAt: nonce.issuedAt,
-    expirationTime: nonce.expirationTime,
-  }
+  })
 }
 
 async function verifyMessage({
   address,
-  baseUrl,
-  signature,
+  cluster,
   message,
+  signature,
 }: {
   address: Address
-  baseUrl: string
-  signature: Signature
+  cluster: string
   message: string
-}): Promise<SolanaAuthVerifyResponse> {
-  const response = await fetch(`${baseUrl}/api/auth/solana-auth/verify`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ walletAddress: address, signature, message }),
-    credentials: 'include',
+  signature: Signature
+}) {
+  const { data, error } = await authClient.siws.verify({
+    cluster,
+    message,
+    signature,
+    walletAddress: address,
   })
 
-  if (!response.ok) {
-    let errorMessage = 'Failed to verify signature'
-    try {
-      const errorData = await response.json()
-      errorMessage = errorData.message || errorMessage
-    } catch {
-      // Response wasn't JSON
-    }
-    throw new Error(errorMessage)
+  if (!data) {
+    throw new Error(error?.message || 'Failed to verify signature')
   }
 
-  return response.json()
+  return data
 }

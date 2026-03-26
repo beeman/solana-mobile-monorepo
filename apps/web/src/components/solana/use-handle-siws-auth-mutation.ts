@@ -14,8 +14,6 @@ interface UseSiwsAuthOptions {
   wallet: UiWallet
 }
 
-const baseUrl = env.VITE_SERVER_URL
-
 export function useHandleSiwsAuthMutation({
   account,
   onError,
@@ -35,7 +33,7 @@ export function useHandleSiwsAuthMutation({
     mutationFn: () =>
       handleSiwsAuth({
         address,
-        baseUrl,
+        cluster: env.VITE_SOLANA_AUTH_CLUSTER,
         statement,
         signIn,
         refresh: session.refetch,

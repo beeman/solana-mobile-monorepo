@@ -1,10 +1,10 @@
 import { expo } from '@better-auth/expo'
-import { solanaAuth } from '@solana-mobile-monorepo/better-auth-solana'
 import { db } from '@solana-mobile-monorepo/db'
 import * as schema from '@solana-mobile-monorepo/db/schema/auth'
 import { env } from '@solana-mobile-monorepo/env/server'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { siws } from 'better-auth-solana'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -36,10 +36,9 @@ export const auth = betterAuth({
   },
   plugins: [
     expo(),
-    solanaAuth({
-      domain: new URL(env.BETTER_AUTH_URL).hostname,
+    siws({
       anonymous: true,
-      cluster: env.SOLANA_CLUSTER,
+      domain: new URL(env.BETTER_AUTH_URL).hostname,
       emailDomainName: env.SOLANA_EMAIL_DOMAIN,
     }),
   ],
