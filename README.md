@@ -70,7 +70,7 @@ openssl rand -hex 32
 Start a local libSQL database:
 
 ```bash
-bun run db:dev
+bun run db:local
 ```
 
 This starts a libSQL server on port 8080 using the [Turso CLI](https://docs.turso.tech/cli/installation).
@@ -211,10 +211,9 @@ From the project root:
 | `bun rename <name>` | Rename the project across all files |
 | `bun run build` | Build all apps |
 | `bun run check-types` | TypeScript type checking |
-| `bun run db:dev` | Start local database (Turso dev server on port 8080) |
+| `bun run db:local` | Start local database (Turso dev server on port 8080) |
 | `bun run db:push` | Push schema changes |
 | `bun run db:studio` | Open database UI |
-| `bun run dev` | Start all apps in development mode |
 | `bun run dev:native` | Start only the mobile app dev server |
 | `bun run dev:server` | Start only the API server |
 | `bun run dev:web` | Start only the web app |
@@ -267,7 +266,7 @@ Make sure you've run `bun run android` at least once from `apps/native/` to crea
 
 ### Database connection errors
 
-- Verify the database is running: `bun run db:dev`
+- Verify the database is running: `bun run db:local`
 - Ensure `DATABASE_URL` in `.env` matches your setup (default: `http://localhost:8080`)
 
 ## License

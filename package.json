@@ -18,7 +18,6 @@
   "scripts": {
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "db:dev": "turso dev --port 8080 --db-file local.db",
     "db:generate": "turbo -F @solana-mobile-monorepo/db db:generate",
     "db:local": "turbo -F @solana-mobile-monorepo/db db:local",
     "db:migrate": "turbo -F @solana-mobile-monorepo/db db:migrate",
@@ -75,5 +74,20 @@
       "typescript": "^5.9.3",
       "zod": "^4.1.13"
     }
+  },
+  "create-seed": {
+    "instructions": [
+      "Set up the local database:",
+      "+{pm} run db:local",
+      "Apply the schema once:",
+      "+{pm} run db:push",
+      "~",
+      "Your database is ready. Start the server:",
+      "+{pm} run dev:server",
+      "Start the Android app:",
+      "+{pm} run dev:native",
+      "Start the web app:",
+      "+{pm} run dev:web"
+    ]
   }
 }
