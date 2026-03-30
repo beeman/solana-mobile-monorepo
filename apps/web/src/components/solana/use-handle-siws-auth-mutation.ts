@@ -1,5 +1,4 @@
 import { assertIsAddress } from '@solana/kit'
-import { env } from '@solana-mobile-monorepo/env/web'
 import { useMutation } from '@tanstack/react-query'
 import type { UiWallet, UiWalletAccount } from '@wallet-ui/react'
 import { useSignIn } from '@wallet-ui/react'
@@ -13,8 +12,6 @@ interface UseSiwsAuthOptions {
   statement?: string
   wallet: UiWallet
 }
-
-const baseUrl = env.VITE_SERVER_URL
 
 export function useHandleSiwsAuthMutation({
   account,
@@ -35,7 +32,6 @@ export function useHandleSiwsAuthMutation({
     mutationFn: () =>
       handleSiwsAuth({
         address,
-        baseUrl,
         statement,
         signIn,
         refresh: session.refetch,

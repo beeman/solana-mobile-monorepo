@@ -19,7 +19,6 @@ services:
       - DATABASE_URL=http://db:8080
       - DATABASE_AUTH_TOKEN=local
       - PORT=3000
-      - SOLANA_CLUSTER=${SOLANA_CLUSTER:-devnet}
       - SOLANA_EMAIL_DOMAIN=${SOLANA_EMAIL_DOMAIN:-example.com}
       - SOLANA_ENDPOINT=${SOLANA_ENDPOINT:-https://api.devnet.solana.com}
     ports:

@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@better-auth/expo": "catalog:",
-    "@solana-mobile-monorepo/better-auth-solana": "workspace:*",
     "@solana-mobile-monorepo/db": "workspace:*",
     "@solana-mobile-monorepo/env": "workspace:*",
     "better-auth": "catalog:",
+    "better-auth-solana": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },

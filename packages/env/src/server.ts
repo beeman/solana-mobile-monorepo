@@ -15,9 +15,6 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'production', 'test'])
       .default('development'),
-    SOLANA_CLUSTER: z
-      .enum(['devnet', 'testnet', 'localnet', 'custom', 'mainnet'])
-      .default('devnet'),
     SOLANA_EMAIL_DOMAIN: z.string().default('example.com'),
     SOLANA_ENDPOINT: z.url().default('https://api.devnet.solana.com'),
   },

@@ -92,15 +92,14 @@ export const verification = sqliteTable(
   (table) => [index('verification_identifier_idx').on(table.identifier)],
 )
 
-export const walletAddress = sqliteTable(
-  'wallet_address',
+export const solanaWallet = sqliteTable(
+  'solana_wallet',
   {
     id: text('id').primaryKey(),
     userId: text('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
     address: text('address').notNull(),
-    cluster: text('cluster').notNull().default('mainnet-beta'),
     isPrimary: integer('is_primary', { mode: 'boolean' })
       .default(false)
       .notNull(),
@@ -109,15 +108,15 @@ export const walletAddress = sqliteTable(
       .notNull(),
   },
   (table) => [
-    index('wallet_address_userId_idx').on(table.userId),
-    index('wallet_address_address_idx').on(table.address),
+    index('solana_wallet_userId_idx').on(table.userId),
+    index('solana_wallet_address_idx').on(table.address),
   ],
 )
 
 export const userRelations = relations(user, ({ many }) => ({
-  sessions: many(session),
   accounts: many(account),
-  walletAddresses: many(walletAddress),
+  sessions: many(session),
+  solanaWallets: many(solanaWallet),
 }))
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -134,9 +133,9 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }))
 
-export const walletAddressRelations = relations(walletAddress, ({ one }) => ({
+export const solanaWalletRelations = relations(solanaWallet, ({ one }) => ({
   user: one(user, {
-    fields: [walletAddress.userId],
+    fields: [solanaWallet.userId],
     references: [user.id],
   }),
 }))

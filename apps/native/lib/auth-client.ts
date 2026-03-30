@@ -1,6 +1,6 @@
 import { expoClient } from '@better-auth/expo/client'
-import { solanaAuthClient } from '@solana-mobile-monorepo/better-auth-solana/client'
 import { createAuthClient } from 'better-auth/react'
+import { siwsClient } from 'better-auth-solana/client'
 import Constants from 'expo-constants'
 import * as SecureStore from 'expo-secure-store'
 
@@ -14,7 +14,7 @@ export const authClient = createAuthClient({
       storagePrefix: Constants.expoConfig?.scheme as string,
       storage: SecureStore,
     }),
-    solanaAuthClient(),
+    siwsClient(),
   ],
 })
 

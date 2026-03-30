@@ -5,85 +5,73 @@ import {
   type Signature,
 } from '@solana/kit'
 import type {
-  SolanaAuthNonceResponse,
-  SolanaAuthVerifyResponse,
-} from '@solana-mobile-monorepo/better-auth-solana/types'
-import type {
   SolanaSignInInput,
   SolanaSignInOutput,
   WalletAccount,
 } from '@wallet-ui/react'
+import {
+  createSIWSInput,
+  type SIWSNonceResponse,
+} from 'better-auth-solana/client'
+import { authClient } from '@/lib/auth-client'
 
 export async function handleSiwsAuth({
   address,
-  baseUrl,
   refresh,
   signIn,
   statement,
 }: {
   address: Address
-  baseUrl: string
   refresh: () => Promise<void>
   signIn: (input: SolanaSignInInput) => Promise<SolanaSignInOutput>
   statement: string
 }) {
-  const nonce = await fetchNonce({ address, baseUrl })
-  const { signature, message } = await createAndSignMessage({
-    nonce,
+  const challenge = await fetchNonce({ address })
+  const { message, signature } = await createAndSignMessage({
     address,
-    statement,
+    challenge,
     signIn,
+    statement,
   })
   const verifyData = await verifyMessage({
     address,
-    baseUrl,
-    signature,
     message,
+    signature,
   })
+
   await refresh()
+
   return verifyData
 }
 
 async function fetchNonce({
   address,
-  baseUrl,
 }: {
   address: Address
-  baseUrl: string
-}): Promise<SolanaAuthNonceResponse> {
-  const response = await fetch(`${baseUrl}/api/auth/solana-auth/nonce`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ walletAddress: address }),
-    credentials: 'include',
+}): Promise<SIWSNonceResponse> {
+  const result = await authClient.siws.nonce({
+    walletAddress: address,
   })
 
-  if (!response.ok) {
-    let errorMessage = 'Failed to fetch nonce'
-    try {
-      const errorData = await response.json()
-      errorMessage = errorData.message || errorMessage
-    } catch {
-      // Response wasn't JSON
-    }
-    throw new Error(errorMessage)
+  if (!result.data) {
+    throw new Error(result.error?.message || 'Failed to fetch nonce')
   }
 
-  return response.json()
+  return result.data
 }
 
 async function createAndSignMessage({
   address,
-  nonce,
+  challenge,
   signIn,
   statement,
 }: {
   address: Address
-  nonce: SolanaAuthNonceResponse
+  challenge: SIWSNonceResponse
   signIn: (input: SolanaSignInInput) => Promise<SolanaSignInOutput>
   statement: string
 }): Promise<{ account: WalletAccount; message: string; signature: Signature }> {
-  const input = createSignInInput({ address, nonce, statement })
+  const input = createSignInInput({ address, challenge, statement })
   const { account, signedMessage, signature } = await signIn(input)
 
   return {
@@ -101,54 +89,34 @@ function signatureBytesToSignature(bytes: Uint8Array<ArrayBufferLike>) {
 
 function createSignInInput({
   address,
-  nonce,
+  challenge,
   statement,
 }: {
   address: Address
-  nonce: SolanaAuthNonceResponse
+  challenge: SIWSNonceResponse
   statement: string
 }): SolanaSignInInput {
-  return {
-    address,
-    chainId: nonce.chainId,
-    domain: nonce.domain,
-    uri: nonce.uri,
-    version: '1',
-    statement,
-    nonce: nonce.nonce,
-    issuedAt: nonce.issuedAt,
-    expirationTime: nonce.expirationTime,
-  }
+  return createSIWSInput({ address, challenge, statement })
 }
 
 async function verifyMessage({
   address,
-  baseUrl,
-  signature,
   message,
+  signature,
 }: {
   address: Address
-  baseUrl: string
-  signature: Signature
   message: string
-}): Promise<SolanaAuthVerifyResponse> {
-  const response = await fetch(`${baseUrl}/api/auth/solana-auth/verify`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ walletAddress: address, signature, message }),
-    credentials: 'include',
+  signature: Signature
+}) {
+  const result = await authClient.siws.verify({
+    message,
+    signature,
+    walletAddress: address,
   })
 
-  if (!response.ok) {
-    let errorMessage = 'Failed to verify signature'
-    try {
-      const errorData = await response.json()
-      errorMessage = errorData.message || errorMessage
-    } catch {
-      // Response wasn't JSON
-    }
-    throw new Error(errorMessage)
+  if (!result.data) {
+    throw new Error(result.error?.message || 'Failed to verify signature')
   }
 
-  return response.json()
+  return result.data
 }

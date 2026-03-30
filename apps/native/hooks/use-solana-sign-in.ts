@@ -1,9 +1,6 @@
 import { getBase58Decoder, getBase64Encoder, getUtf8Decoder } from '@solana/kit'
-import type {
-  SolanaAuthNonceResponse,
-  SolanaAuthVerifyResponse,
-} from '@solana-mobile-monorepo/better-auth-solana/client'
 import { useMobileWallet } from '@wallet-ui/react-native-kit'
+import { createSIWSInput } from 'better-auth-solana/client'
 import { useState } from 'react'
 import { Alert } from 'react-native'
 import { authClient } from '@/lib/auth-client'
@@ -18,24 +15,21 @@ export function useSolanaSignIn() {
     try {
       const activeAccount = account || (await connect())
       const address = activeAccount.address
-
-      const { data: nonce, error: nonceError } =
-        await authClient.$fetch<SolanaAuthNonceResponse>('/solana-auth/nonce', {
-          method: 'POST',
-          body: { walletAddress: address },
-        })
-
-      if (nonceError || !nonce) {
-        throw new Error(nonceError?.message || 'Failed to get nonce')
-      }
-
-      const result = await signIn({
-        address,
-        domain: nonce.domain,
-        nonce: nonce.nonce,
-        statement: 'Sign in to Solana Mobile Monorepo',
+      const nonceResult = await authClient.siws.nonce({
+        walletAddress: address,
       })
 
+      if (!nonceResult.data) {
+        throw new Error(nonceResult.error?.message || 'Failed to get nonce')
+      }
+
+      const result = await signIn(
+        createSIWSInput({
+          address,
+          challenge: nonceResult.data,
+          statement: 'Sign in to Solana Mobile Monorepo',
+        }),
+      )
       const signatureBase64 = getUtf8Decoder().decode(result.signature)
       const signedMessageBase64 = getUtf8Decoder().decode(result.signedMessage)
       const signatureBase58 = getBase58Decoder().decode(
@@ -44,22 +38,14 @@ export function useSolanaSignIn() {
       const messageUtf8 = getUtf8Decoder().decode(
         getBase64Encoder().encode(signedMessageBase64),
       )
+      const verifyResult = await authClient.siws.verify({
+        message: messageUtf8,
+        signature: signatureBase58,
+        walletAddress: address,
+      })
 
-      const { data: verifyData, error: verifyError } =
-        await authClient.$fetch<SolanaAuthVerifyResponse>(
-          '/solana-auth/verify',
-          {
-            method: 'POST',
-            body: {
-              walletAddress: address,
-              signature: signatureBase58,
-              message: messageUtf8,
-            },
-          },
-        )
-
-      if (verifyError || !verifyData) {
-        throw new Error(verifyError?.message || 'Verification failed')
+      if (!verifyResult.data) {
+        throw new Error(verifyResult.error?.message || 'Verification failed')
       }
 
       queryClient.invalidateQueries()

@@ -159,7 +159,6 @@ Edit `apps/server/.env` to configure the server:
 | `DATABASE_URL`                 | Database connection URL | `http://localhost:8080`         |
 | `DATABASE_AUTH_TOKEN`          | Database auth token | `local`                         |
 | `SOLANA_ENDPOINT`              | Solana RPC endpoint | `https://api.devnet.solana.com` |
-| `SOLANA_CLUSTER`               | Solana cluster (devnet, mainnet, etc) | `devnet`                        |
 | `SOLANA_EMAIL_DOMAIN`          | Default domain for generated emails | `example.com`                   |
 | `GOOGLE_GENERATIVE_AI_API_KEY` | Optional. Enables AI chat feature | —                               |
 
