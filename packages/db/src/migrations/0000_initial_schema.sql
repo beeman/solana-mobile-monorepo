@@ -70,6 +70,10 @@ CREATE INDEX `wallet_address_userId_idx` ON `wallet_address` (`user_id`);--> sta
 CREATE INDEX `wallet_address_address_idx` ON `wallet_address` (`address`);--> statement-breakpoint
 CREATE TABLE `todo` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`user_id` text NOT NULL,
 	`text` text NOT NULL,
-	`completed` integer DEFAULT false NOT NULL
+	`completed` integer DEFAULT false NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
+--> statement-breakpoint
+CREATE INDEX `todo_userId_idx` ON `todo` (`user_id`);
