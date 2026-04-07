@@ -36,7 +36,7 @@
     "lint:fix": "biome check --write .",
     "rename": "bun scripts/rename.ts",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
-    "setup": "bun run scripts/copy-env.ts",
+    "setup": "bun run scripts/copy-env.ts && bun ruler:apply",
     "start:web": "bun run --cwd apps/web start",
     "test": "turbo test"
   },

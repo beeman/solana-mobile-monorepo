@@ -51,23 +51,15 @@ temp
 local.db*
 
 # START Ruler Generated Files
-/.agent/skills
-/.agents/skills
 /.claude/skills
 /.codex/config.toml
 /.codex/config.toml.bak
 /.codex/skills
-/.cursor/skills
-/.factory/skills
 /.gemini/settings.json
 /.gemini/settings.json.bak
 /.gemini/skills
 /.mcp.json
 /.mcp.json.bak
-/.opencode/skill
-/.pi/skills
-/.roo/skills
-/.vibe/skills
 /.vscode/mcp.json
 /.vscode/mcp.json.bak
 /AGENTS.md
