@@ -21,11 +21,11 @@ import {
 } from 'react-native'
 
 import { Container } from '@/components/container'
-import { serverUrl } from '@/lib/server-url'
+import { apiUrl } from '@/lib/api-url'
 
 const generateAPIUrl = (relativePath: string) => {
   const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`
-  return serverUrl.concat(path)
+  return apiUrl.concat(path)
 }
 
 export default function AIScreen() {

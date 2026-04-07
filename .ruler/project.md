@@ -6,11 +6,11 @@ This is a solana-mobile-monorepo project created with Better-T-Stack CLI.
 
 This is a monorepo with the following structure:
 
-- **`apps/web/`** - Frontend application (TanStack Start)
-
-- **`apps/server/`** - Backend server (Hono)
+- **`apps/api/`** - Backend API (Hono)
 
 - **`apps/native/`** - React Native mobile app (with NativeWind)
+
+- **`apps/web/`** - Frontend application (TanStack Start)
 
 - **`packages/api/`** - Shared API logic and types
 - **`packages/auth/`** - Authentication logic and utilities
@@ -21,16 +21,16 @@ This is a monorepo with the following structure:
 ## Available Scripts
 
 - `bun run dev` - Start all apps in development mode
-- `bun run dev:web` - Start only the web app
-- `bun run dev:server` - Start only the server
+- `bun run dev:api` - Start only the api
 - `bun run dev:native` - Start only the native app
+- `bun run dev:web` - Start only the web app
 - `bun run build` - Build all apps
 - `bun run lint` - Lint all packages
 - `bun run check-types` - Type check all packages
 
 ## Database Commands
 
-All database operations should be run from the server workspace:
+All database operations should be run from the root:
 
 - `bun run db:push` - Push schema changes to database
 - `bun run db:studio` - Open database studio

@@ -17,7 +17,7 @@ function RouteComponent() {
   const [input, setInput] = useState('')
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
-      api: `${env.VITE_SERVER_URL}/ai`,
+      api: `${env.VITE_API_URL}/ai`,
     }),
   })
 

@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client'
-import { env } from '@solana-mobile-monorepo/env/server'
+import { env } from '@solana-mobile-monorepo/env/api'
 import { drizzle } from 'drizzle-orm/libsql'
 
 import * as schema from './schema'

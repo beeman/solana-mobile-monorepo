@@ -6,7 +6,7 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 
 - **Mobile App** — React Native with Expo, wallet integration via Mobile Wallet Adapter
 - **Web App** — React with TanStack Start for SSR
-- **Backend** — Hono server with oRPC for type-safe APIs
+- **Backend** — Hono API with oRPC for type-safe APIs
 - **Database** — SQLite/Turso with Drizzle ORM
 - **Auth** — Better-Auth with Sign in with Solana
 - **AI Chat** — Optional Google Gemini integration
@@ -18,7 +18,7 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 | Runtime | Bun |
 | Mobile | React Native, Expo |
 | Web | React, TanStack Start |
-| Server | Hono, oRPC |
+| API | Hono, oRPC |
 | Database | SQLite/Turso, Drizzle |
 | Solana | @solana/kit, @wallet-ui/react-native-kit |
 | Styling | TailwindCSS, heroui-native |
@@ -55,10 +55,10 @@ Running `bun rename` without arguments detects that the directory name differs f
 Copy the environment file:
 
 ```bash
-cp apps/server/.env.example apps/server/.env
+cp apps/api/.env.example apps/api/.env
 ```
 
-Generate a secure auth secret and update the `apps/server/.env` file:
+Generate a secure auth secret and update the `apps/api/.env` file:
 
 ```bash
 openssl rand -hex 32
@@ -89,10 +89,10 @@ bun run db:push
 
 ### 3. Start the apps
 
-#### Start the Server
+#### Start the API
 
 ```bash
-bun run dev:server
+bun run dev:api
 ```
 
 This starts the API at http://localhost:3000
@@ -136,9 +136,9 @@ On the emulator, install a wallet app from the Play Store to test wallet connect
 ```
 solana-mobile-monorepo/
 ├── apps/
+│   ├── api/         # API (Hono, oRPC)
 │   ├── native/      # Mobile app (React Native, Expo)
-│   ├── web/         # Web app (React, TanStack Start)
-│   └── server/      # API server (Hono, oRPC)
+│   └── web/         # Web app (React, TanStack Start)
 ├── packages/
 │   ├── api/         # Shared API routes and business logic
 │   ├── auth/        # Authentication configuration
@@ -149,12 +149,12 @@ solana-mobile-monorepo/
 
 ## Environment Variables
 
-Edit `apps/server/.env` to configure the server:
+Edit `apps/api/.env` to configure the API:
 
 | Variable                       | Description | Default                         |
 |--------------------------------|-------------|---------------------------------|
 | `BETTER_AUTH_SECRET`           | Auth secret (min 32 chars). Generate with `openssl rand -hex 32` | —                               |
-| `BETTER_AUTH_URL`              | Server URL for auth callbacks | `http://localhost:3000`         |
+| `BETTER_AUTH_URL`              | API URL for auth callbacks | `http://localhost:3000`         |
 | `CORS_ORIGINS`                 | Comma-separated list of allowed origins for CORS | `http://localhost:3001,solana-mobile-monorepo://`        |
 | `DATABASE_URL`                 | Database connection URL | `http://localhost:8080`         |
 | `DATABASE_AUTH_TOKEN`          | Database auth token | `local`                         |
@@ -168,15 +168,15 @@ The app includes an AI chat feature powered by Google Gemini. To enable it:
 
 1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
 2. Click "Create API Key"
-3. Copy the key and add it to `apps/server/.env`:
+3. Copy the key and add it to `apps/api/.env`:
    ```
    GOOGLE_GENERATIVE_AI_API_KEY=your-api-key-here
    ```
-4. Restart the server
+4. Restart the API
 
 ## Deployment
 
-The project includes a `docker-compose.yml` for containerized deployment. It runs the database, server, and web app together with no ports exposed on the database.
+The project includes a `docker-compose.yml` for containerized deployment. It runs the database, api, and web app together with no ports exposed on the database.
 
 ### Deploy on Dokploy
 
@@ -193,14 +193,14 @@ The project includes a `docker-compose.yml` for containerized deployment. It run
    BETTER_AUTH_SECRET=<your-secret>
    BETTER_AUTH_URL=https://your-api-domain.com
    CORS_ORIGINS=https://your-web-domain.com
-   VITE_SERVER_URL=https://your-api-domain.com
+   VITE_API_URL=https://your-api-domain.com
    ```
 3. Run:
    ```bash
    docker compose up -d --build
    ```
 
-The compose file uses sensible defaults for all variables. For reverse proxy setups, point your domains to the exposed ports (`SERVER_PORT` defaults to 3000, `WEB_PORT` defaults to 3001).
+The compose file uses sensible defaults for all variables. For reverse proxy setups, point your domains to the exposed ports (`API_PORT` defaults to 3000, `WEB_PORT` defaults to 3001).
 
 ## Available Scripts
 
@@ -212,11 +212,11 @@ From the project root:
 | `bun run build` | Build all apps |
 | `bun run check-types` | TypeScript type checking |
 | `bun run db:local` | Start local database (Turso dev server on port 8080) |
-| `bun run db:push` | Push schema changes |
+| `bun run db:push` | Push schema to the database |
 | `bun run db:studio` | Open database UI |
-| `bun run dev:native` | Start only the mobile app dev server |
-| `bun run dev:server` | Start only the API server |
-| `bun run dev:web` | Start only the web app |
+| `bun run dev:api` | Start the API |
+| `bun run dev:native` | Start the mobile app dev server |
+| `bun run dev:web` | Start the web app |
 | `bun run lint` | Run linting and formatting checks |
 | `bun run lint:fix` | Fix linting and formatting issues |
 | `bun run ruler:apply` | Regenerate AI agent config files |
@@ -250,9 +250,9 @@ Ruler configures these MCP servers for AI agents:
 
 ## Troubleshooting
 
-### Mobile app can't reach the local server
+### Mobile app can't reach the API
 
-The native app logs `Native server URL` on startup. If that URL is wrong or unreachable from your Android device or emulator, set `EXPO_PUBLIC_SERVER_URL=http://<your-mac-lan-ip>:3000` in `apps/native/.env` and restart the app.
+The native app logs `API URL` on startup. If that URL is wrong or unreachable from your Android device or emulator, set `EXPO_PUBLIC_API_URL=http://<your-mac-lan-ip>:3000` in `apps/native/.env` and restart the app.
 
 ### Mobile app won't start
 

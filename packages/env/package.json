@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./server": "./src/server.ts",
+    "./api": "./src/api.ts",
     "./web": "./src/web.ts",
     "./native": "./src/native.ts"
   },

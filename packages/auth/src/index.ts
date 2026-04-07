@@ -1,7 +1,7 @@
 import { expo } from '@better-auth/expo'
 import { db } from '@solana-mobile-monorepo/db'
 import * as schema from '@solana-mobile-monorepo/db/schema/auth'
-import { env } from '@solana-mobile-monorepo/env/server'
+import { env } from '@solana-mobile-monorepo/env/api'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { siws } from 'better-auth-solana'

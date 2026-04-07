@@ -1,5 +1,5 @@
 import { auth } from '@solana-mobile-monorepo/auth'
-import { env } from '@solana-mobile-monorepo/env/server'
+import { env } from '@solana-mobile-monorepo/env/api'
 import { createSolanaClient } from '@solana-mobile-monorepo/solana-client'
 import type { Context as HonoContext } from 'hono'
 

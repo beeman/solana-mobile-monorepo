@@ -4,10 +4,10 @@ import { siwsClient } from 'better-auth-solana/client'
 import Constants from 'expo-constants'
 import * as SecureStore from 'expo-secure-store'
 
-import { serverUrl } from '@/lib/server-url'
+import { apiUrl } from '@/lib/api-url'
 
 export const authClient = createAuthClient({
-  baseURL: serverUrl,
+  baseURL: apiUrl,
   plugins: [
     expoClient({
       scheme: Constants.expoConfig?.scheme as string,

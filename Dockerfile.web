@@ -11,8 +11,8 @@ RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 # VITE_ prefixed env vars must be present at build time for Vite to embed them
-ARG VITE_SERVER_URL
-ENV VITE_SERVER_URL=$VITE_SERVER_URL
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
 COPY . .
 RUN bun run build --filter web

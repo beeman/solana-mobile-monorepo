@@ -3,7 +3,7 @@ import { createAuthClient } from 'better-auth/react'
 import { siwsClient } from 'better-auth-solana/client'
 
 export const authClient = createAuthClient({
-  baseURL: env.VITE_SERVER_URL,
+  baseURL: env.VITE_API_URL,
   plugins: [siwsClient()],
 })
 

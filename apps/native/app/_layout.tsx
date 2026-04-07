@@ -12,14 +12,14 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { ThemedStatusBar } from '@/components/themed-status-bar'
 import { AppThemeProvider } from '@/contexts/app-theme-context'
-import { debugServerUrl } from '@/lib/server-url'
+import { debugApiUrl } from '@/lib/api-url'
 import { queryClient } from '@/utils/orpc'
 
 export const unstable_settings = {
   initialRouteName: '(drawer)',
 }
 
-debugServerUrl()
+debugApiUrl()
 
 const cluster = createSolanaDevnet()
 const identity = {

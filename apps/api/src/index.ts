@@ -7,13 +7,13 @@ import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4'
 import { createContext } from '@solana-mobile-monorepo/api/context'
 import { appRouter } from '@solana-mobile-monorepo/api/routers/index'
 import { auth } from '@solana-mobile-monorepo/auth'
-import { env } from '@solana-mobile-monorepo/env/server'
+import { env } from '@solana-mobile-monorepo/env/api'
 import { convertToModelMessages, streamText } from 'ai'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 
-console.log('🚀 Server starting...')
+console.log('🚀 API is starting...')
 console.log(`  DATABASE_URL: ${new URL(env.DATABASE_URL).origin}`)
 console.log(`  BETTER_AUTH_URL: ${env.BETTER_AUTH_URL}`)
 console.log(`  CORS_ORIGINS: ${env.CORS_ORIGINS.join(', ')}`)

@@ -4,9 +4,8 @@ import { createTanstackQueryUtils } from '@orpc/tanstack-query'
 import type { AppRouterClient } from '@solana-mobile-monorepo/api/routers/index'
 import { QueryCache, QueryClient } from '@tanstack/react-query'
 import { Platform } from 'react-native'
-
+import { apiUrl } from '@/lib/api-url'
 import { authClient } from '@/lib/auth-client'
-import { serverUrl } from '@/lib/server-url'
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -17,7 +16,7 @@ export const queryClient = new QueryClient({
 })
 
 export const link = new RPCLink({
-  url: `${serverUrl}/rpc`,
+  url: `${apiUrl}/rpc`,
   fetch:
     Platform.OS !== 'web'
       ? undefined
