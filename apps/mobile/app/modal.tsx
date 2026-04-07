@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { Button, Surface, useThemeColor } from 'heroui-native'
 import { Text, View } from 'react-native'
 
-import { Container } from '@/components/container'
+import { ShellUiContainer } from '@/features/shell/ui/shell-ui-container'
 
 function Modal() {
   const accentForegroundColor = useThemeColor('accent-foreground')
@@ -13,7 +13,7 @@ function Modal() {
   }
 
   return (
-    <Container>
+    <ShellUiContainer>
       <View className="flex-1 items-center justify-center p-4">
         <Surface variant="secondary" className="w-full max-w-sm rounded-lg p-5">
           <View className="items-center">
@@ -36,7 +36,7 @@ function Modal() {
           </Button>
         </Surface>
       </View>
-    </Container>
+    </ShellUiContainer>
   )
 }
 
