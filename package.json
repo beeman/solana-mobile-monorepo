@@ -24,7 +24,7 @@
     "db:push": "bun run --cwd packages/db db:push",
     "db:studio": "bun run --cwd packages/db db:studio",
     "dev:api": "bun run --cwd apps/api dev",
-    "dev:native": "bun run --cwd apps/native android",
+    "dev:mobile": "bun run --cwd apps/mobile android",
     "dev:web": "bun run --cwd apps/web dev",
     "docker:build:api": "docker build -f Dockerfile.api -t ghcr.io/beeman/solana-mobile-monorepo-api .",
     "docker:build:web": "docker build -f Dockerfile.web -t ghcr.io/beeman/solana-mobile-monorepo-web .",
@@ -85,7 +85,7 @@
       "Your database is ready. Start the API:",
       "+{pm} run dev:api",
       "Start the Android app:",
-      "+{pm} run dev:native",
+      "+{pm} run dev:mobile",
       "Start the web app:",
       "+{pm} run dev:web"
     ]

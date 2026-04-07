@@ -8,7 +8,7 @@ This is a monorepo with the following structure:
 
 - **`apps/api/`** - Backend API (Hono)
 
-- **`apps/native/`** - React Native mobile app (with NativeWind)
+- **`apps/mobile/`** - React Native mobile app (with Uniwind)
 
 - **`apps/web/`** - Frontend application (TanStack Start)
 
@@ -22,7 +22,7 @@ This is a monorepo with the following structure:
 
 - `bun run dev` - Start all apps in development mode
 - `bun run dev:api` - Start only the api
-- `bun run dev:native` - Start only the native app
+- `bun run dev:mobile` - Start only the mobile app
 - `bun run dev:web` - Start only the web app
 - `bun run build` - Build all apps
 - `bun run lint` - Lint all packages
@@ -49,8 +49,8 @@ Database schema files are located in `packages/db/src/schema/`
 Authentication is powered by Better Auth:
 
 - Auth configuration is in `packages/auth/src/`
+- Mobile app auth client is in `apps/mobile/src/lib/auth-client.ts`
 - Web app auth client is in `apps/web/src/lib/auth-client.ts`
-- Native app auth client is in `apps/native/src/lib/auth-client.ts`
 
 ## Key Points
 

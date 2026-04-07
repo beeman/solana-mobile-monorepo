@@ -4,9 +4,9 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 
 ## What's Included
 
+- **Backend** — Hono API with oRPC for type-safe APIs
 - **Mobile App** — React Native with Expo, wallet integration via Mobile Wallet Adapter
 - **Web App** — React with TanStack Start for SSR
-- **Backend** — Hono API with oRPC for type-safe APIs
 - **Database** — SQLite/Turso with Drizzle ORM
 - **Auth** — Better-Auth with Sign in with Solana
 - **AI Chat** — Optional Google Gemini integration
@@ -112,7 +112,7 @@ The mobile app requires a native build (it won't run in Expo Go due to native de
 In a separate terminal:
 
 ```bash
-bun run dev:native
+bun run dev:mobile
 ```
 
 This builds the app and installs it on your connected device or emulator. Subsequent runs will be faster as they use the cached build.
@@ -137,7 +137,7 @@ On the emulator, install a wallet app from the Play Store to test wallet connect
 solana-mobile-monorepo/
 ├── apps/
 │   ├── api/         # API (Hono, oRPC)
-│   ├── native/      # Mobile app (React Native, Expo)
+│   ├── mobile/      # Mobile app (React Native, Expo)
 │   └── web/         # Web app (React, TanStack Start)
 ├── packages/
 │   ├── api/         # Shared API routes and business logic
@@ -215,7 +215,7 @@ From the project root:
 | `bun run db:push` | Push schema to the database |
 | `bun run db:studio` | Open database UI |
 | `bun run dev:api` | Start the API |
-| `bun run dev:native` | Start the mobile app dev server |
+| `bun run dev:mobile` | Start the mobile app dev server |
 | `bun run dev:web` | Start the web app |
 | `bun run lint` | Run linting and formatting checks |
 | `bun run lint:fix` | Fix linting and formatting issues |
@@ -252,11 +252,11 @@ Ruler configures these MCP servers for AI agents:
 
 ### Mobile app can't reach the API
 
-The native app logs `API URL` on startup. If that URL is wrong or unreachable from your Android device or emulator, set `EXPO_PUBLIC_API_URL=http://<your-mac-lan-ip>:3000` in `apps/native/.env` and restart the app.
+The mobile app logs `API URL` on startup. If that URL is wrong or unreachable from your Android device or emulator, set `EXPO_PUBLIC_API_URL=http://<your-mac-lan-ip>:3000` in `apps/mobile/.env` and restart the app.
 
 ### Mobile app won't start
 
-Make sure you've run `bun run android` at least once from `apps/native/` to create the native build. The app requires native modules that aren't available in Expo Go.
+Make sure you've run `bun run android` at least once from `apps/mobile/` to create the native build. The app requires native modules that aren't available in Expo Go.
 
 ### Wallet not connecting
 

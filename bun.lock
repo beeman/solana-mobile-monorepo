@@ -18,8 +18,8 @@
         "typescript": "catalog:",
       },
     },
-    "apps/native": {
-      "name": "native",
+    "apps/mobile": {
+      "name": "mobile",
       "version": "1.0.0",
       "dependencies": {
         "@ai-sdk/react": "catalog:",
@@ -2742,7 +2742,7 @@
 
     "nanostores": ["nanostores@1.2.0", "", {}, "sha512-F0wCzbsH80G7XXo0Jd9/AVQC7ouWY6idUCTnMwW5t/Rv9W8qmO6endavDwg7TNp5GbugwSukFMVZqzPSrSMndg=="],
 
-    "native": ["native@workspace:apps/native"],
+    "mobile": ["mobile@workspace:apps/mobile"],
 
     "negotiator": ["negotiator@0.6.3", "", {}, "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg=="],
 

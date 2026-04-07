@@ -1,4 +1,4 @@
-import { env } from '@solana-mobile-monorepo/env/native'
+import { env } from '@solana-mobile-monorepo/env/mobile'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
 
@@ -7,7 +7,7 @@ const DEFAULT_API_PORT = '3000'
 const LOCALHOST_HOSTS = new Set(['127.0.0.1', '::1', 'localhost'])
 const CONFIGURED_SOURCE = 'configured'
 const DERIVED_SOURCE = 'derived'
-const API_URL_LOGGED_FLAG = '__native_api_url_logged__'
+const API_URL_LOGGED_FLAG = '__mobile_api_url_logged__'
 
 type ApiUrlSource = typeof CONFIGURED_SOURCE | typeof DERIVED_SOURCE
 
@@ -58,13 +58,13 @@ export function getApiUrl() {
   }
 
   throw new Error(
-    'EXPO_PUBLIC_API_URL is not configured. Set it in apps/native/.env or run the app through Expo so the development host can be derived automatically.',
+    'EXPO_PUBLIC_API_URL is not configured. Set it in apps/mobile/.env or run the app through Expo so the development host can be derived automatically.',
   )
 }
 
-export const nativeApiUrl = getApiUrl()
-export const apiUrl = nativeApiUrl.value
-export const apiUrlSource = nativeApiUrl.source
+export const mobileApiUrl = getApiUrl()
+export const apiUrl = mobileApiUrl.value
+export const apiUrlSource = mobileApiUrl.source
 
 export function debugApiUrl() {
   const globalScope = globalThis as typeof globalThis &
@@ -78,7 +78,7 @@ export function debugApiUrl() {
 
   const sourceLabel =
     apiUrlSource === CONFIGURED_SOURCE
-      ? 'apps/native/.env EXPO_PUBLIC_API_URL'
+      ? 'apps/mobile/.env EXPO_PUBLIC_API_URL'
       : 'Expo development host'
 
   console.info(
