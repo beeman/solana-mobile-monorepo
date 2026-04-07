@@ -9,7 +9,7 @@
     "@solana-mobile-monorepo/config": "workspace:*",
     "@types/bun": "catalog:",
     "lefthook": "^2.0.13",
-    "turbo": "^2.6.3",
+    "turbo": "^2.9.4",
     "typescript": "catalog:"
   },
   "name": "solana-mobile-monorepo",
