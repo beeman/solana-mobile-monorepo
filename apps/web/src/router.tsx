@@ -2,11 +2,10 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
-import './index.css'
 import Loader from './components/loader'
-import { SolanaProvider } from './components/solana/solana-provider'
+import { SolanaProvider } from './features/solana/data-access/solana-provider'
+import { orpc, queryClient } from './lib/orpc'
 import { routeTree } from './routeTree.gen'
-import { orpc, queryClient } from './utils/orpc'
 
 export const getRouter = () => {
   return createTanStackRouter({

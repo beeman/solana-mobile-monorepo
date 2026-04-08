@@ -1,50 +1,20 @@
-import { useQuery } from '@tanstack/react-query'
-import {
-  createFileRoute,
-  ErrorComponent,
-  redirect,
-} from '@tanstack/react-router'
+import { createFileRoute, ErrorComponent } from '@tanstack/react-router'
 
-import { getUser } from '@/functions/get-user'
-import { orpc } from '@/utils/orpc'
+import {
+  type RequireAuthContext,
+  requireAuthBeforeLoad,
+  requireAuthLoader,
+} from '@/features/auth/data-access/require-auth'
+import { DashboardFeatureIndex } from '@/features/dashboard/feature/dashboard-feature-index'
 
 export const Route = createFileRoute('/dashboard')({
-  component: RouteComponent,
+  beforeLoad: requireAuthBeforeLoad,
+  component: DashboardFeatureIndex,
   errorComponent: ({ error }) => {
     console.error('[dashboard] Route error:', error)
     return <ErrorComponent error={error} />
   },
-  beforeLoad: async () => {
-    try {
-      const session = await getUser()
-      return { session }
-    } catch (error) {
-      console.error('[dashboard] beforeLoad error:', error)
-      throw error
-    }
-  },
-  loader: async ({
-    context,
-  }: {
-    context: { session: Awaited<ReturnType<typeof getUser>> | null }
-  }) => {
-    if (!context.session) {
-      throw redirect({
-        to: '/login',
-      })
-    }
+  loader: async ({ context }: { context: RequireAuthContext }) => {
+    requireAuthLoader({ context })
   },
 })
-
-function RouteComponent() {
-  const { session } = Route.useRouteContext()
-  const meQuery = useQuery(orpc.me.queryOptions())
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome {session?.user.name}</p>
-      <pre>{JSON.stringify(meQuery.data, null, 2)}</pre>
-    </div>
-  )
-}
