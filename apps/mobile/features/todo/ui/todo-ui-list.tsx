@@ -37,7 +37,7 @@ export function TodoUiList({
   if (todos.length === 0) {
     return (
       <Surface
-        variant="secondary"
+        variant="default"
         className="items-center justify-center rounded-lg py-10"
       >
         <Ionicons name="checkbox-outline" size={40} color={mutedColor} />
