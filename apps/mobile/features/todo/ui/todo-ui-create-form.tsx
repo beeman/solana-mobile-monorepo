@@ -33,7 +33,7 @@ export function TodoUiCreateForm({
   }
 
   return (
-    <Surface variant="secondary" className="mb-4 rounded-lg p-3">
+    <Surface variant="default" className="mb-4 rounded-lg p-3">
       <View className="flex-row items-center gap-2">
         <View className="flex-1">
           <TextField>
@@ -49,7 +49,7 @@ export function TodoUiCreateForm({
         </View>
         <Button
           isIconOnly
-          variant={isPending || !newTodoText.trim() ? 'secondary' : 'primary'}
+          variant={isPending || !newTodoText.trim() ? 'primary' : 'primary'}
           isDisabled={isPending || !newTodoText.trim()}
           onPress={handleCreateTodo}
           size="sm"

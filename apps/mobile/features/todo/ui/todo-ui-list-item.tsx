@@ -33,7 +33,7 @@ export function TodoUiListItem({
   }
 
   return (
-    <Surface key={todo.id} variant="secondary" className="rounded-lg p-3">
+    <Surface key={todo.id} variant="default" className="rounded-lg p-3">
       <View className="flex-row items-center gap-3">
         <Checkbox
           isSelected={todo.completed}
