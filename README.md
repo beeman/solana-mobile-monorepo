@@ -211,6 +211,7 @@ From the project root:
 | `bun rename <name>` | Rename the project across all files |
 | `bun run build` | Build all apps |
 | `bun run check-types` | TypeScript type checking |
+| `bun run clean` | Remove generated build, cache, dependency, and mobile native directories |
 | `bun run db:local` | Start local database (Turso dev server on port 8080) |
 | `bun run db:push` | Push schema to the database |
 | `bun run db:studio` | Open database UI |

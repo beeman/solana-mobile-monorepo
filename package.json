@@ -18,6 +18,7 @@
   "scripts": {
     "build": "turbo build",
     "check-types": "turbo check-types",
+    "clean": "find . -type d \\( -name '.expo' -o -name '.turbo' -o -path './apps/mobile/android' -o -path './apps/mobile/ios' -o -name 'build' -o -name 'dist' -o -name 'node_modules' \\) -prune -exec rm -rf '{}' +",
     "db:generate": "bun run --cwd packages/db db:generate",
     "db:local": "bun run --cwd packages/db db:local",
     "db:migrate": "bun run --cwd packages/db db:migrate",
