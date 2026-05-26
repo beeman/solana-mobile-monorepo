@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c3d5d6d0-6518-4efc-9750-611610381916",
+  "id": "dba2cc2a-4c4d-4cb2-bef8-968b41268ade",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -267,7 +267,7 @@
         "solana_wallet_address_idx": {
           "name": "solana_wallet_address_idx",
           "columns": ["address"],
-          "isUnique": false
+          "isUnique": true
         }
       },
       "foreignKeys": {

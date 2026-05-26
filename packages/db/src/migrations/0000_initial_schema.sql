@@ -41,7 +41,7 @@ CREATE TABLE `solana_wallet` (
 );
 --> statement-breakpoint
 CREATE INDEX `solana_wallet_userId_idx` ON `solana_wallet` (`user_id`);--> statement-breakpoint
-CREATE INDEX `solana_wallet_address_idx` ON `solana_wallet` (`address`);--> statement-breakpoint
+CREATE UNIQUE INDEX `solana_wallet_address_idx` ON `solana_wallet` (`address`);--> statement-breakpoint
 CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
